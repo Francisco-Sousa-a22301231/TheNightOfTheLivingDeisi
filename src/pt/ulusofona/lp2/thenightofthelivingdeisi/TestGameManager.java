@@ -29,7 +29,7 @@ public class TestGameManager {
         result[3] = "0";
         result[4] = null;
         assertEquals(Arrays.toString(result), Arrays.toString(gameManager.getEquipmentInfo(-1)));
-        assertEquals("-1 | Escudo de madeira @ (1, 0)", gameManager.getEquipmentInfoAsString(-1));
+        assertEquals("-1 | Escudo de madeira @ (1,0)", gameManager.getEquipmentInfoAsString(-1));
         assertEquals("E:-1", gameManager.getSquareInfo(1,0));
         result = new String[5];
         result[0] = "-2";
@@ -80,7 +80,7 @@ public class TestGameManager {
         result[3] = "4";
         result[4] = null;
         assertEquals(Arrays.toString(result), Arrays.toString(gameManager.getEquipmentInfo(-1)));
-        assertEquals("-1 | Escudo de madeira @ (0, 4)", gameManager.getEquipmentInfoAsString(-1));
+        assertEquals("-1 | Escudo de madeira @ (0,4)", gameManager.getEquipmentInfoAsString(-1));
         assertEquals("E:-1", gameManager.getSquareInfo(0,4));
         assertEquals("", gameManager.getSquareInfo(0,5));
         assertEquals("", gameManager.getSquareInfo(7,8));
