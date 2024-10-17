@@ -82,17 +82,23 @@ public class Game {
         if (movesToChangeDay == 0) {
             changeTime();
             movesToChangeDay = 1;
+        } else {
+            movesToChangeDay--;
         }
+    }
+
+    public boolean verifyMove(int column0, int line0, int column1, int line1) {
+        return (Math.abs(column0 - column1) == 1 && (line0 == line1)) || (column0 == column1 && Math.abs(line0 - line1) == 1);
     }
 
     public boolean move(int column0, int line0, int column1, int line1) {
         int id0 = searchCoordinates(column0,line0);
         int id1 = searchCoordinates(column1,line1);
-        if (id0 <= 0) {
+        if (id0 <= 0 || getCharacter(id0).getTeam() != currentTeam) {
             return false;
-        } else if (id1 <= 0) {
-            // TODO move verification of coordinates
+        } else if (id1 <= 0 && verifyMove(column0, line0, column1, line1)) {
             Character c0 = getCharacter(id0);
+            board[column1][line1] = id0;
             c0.changeCoordinates(column1, line1);
             removeFromCoordinates(column0, line0);
             if (id1 < 0) {
@@ -103,6 +109,7 @@ public class Game {
                     c0.destroyEquipment(e);
                 }
             }
+            addNewPlay();
             return true;
         }
         return false;

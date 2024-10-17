@@ -118,4 +118,33 @@ public class TestGameManager {
         day = gameManager.isDay();
         assertTrue(day);
     }
+
+    @Test public void testMove() {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/5x6_3H_2Z_1E.txt"));
+        assertEquals(2, gameManager.getGame().searchCoordinates(2,2));
+        assertTrue(gameManager.isDay());
+        assertTrue(gameManager.move(2,2,2,1)); // alive moves
+        assertTrue(gameManager.isDay());
+        assertEquals(0, gameManager.getGame().searchCoordinates(2,2));
+        assertEquals(2, gameManager.getGame().searchCoordinates(2,1));
+        assertFalse(gameManager.move(2,2,2,3)); // alive tries moves
+        assertFalse(gameManager.move(2,4,1,3)); // dead tries to move too much
+        assertFalse(gameManager.move(2,4,2,2)); // dead tries to move too much
+        assertTrue(gameManager.move(0,1,0,2)); // dead moves
+        assertFalse(gameManager.isDay());
+        assertFalse(gameManager.move(0,0,0,1)); // no one is there
+        assertTrue(gameManager.move(2,4,1,4)); // alive moves
+        assertFalse(gameManager.isDay());
+        assertTrue(gameManager.move(5,4,5,3)); // dead moves
+        assertTrue(gameManager.isDay());
+        assertEquals(-1, gameManager.getGame().searchCoordinates(0,4));
+        assertTrue(gameManager.move(1,4,0,4)); // alive moves to equipment
+        assertTrue(gameManager.move(5,3,5,2)); // dead moves
+        assertTrue(gameManager.move(0,4,1,4)); // alive moves with equipment
+        assertEquals(0, gameManager.getGame().searchCoordinates(0,4));
+        assertEquals("5 | Humano | Wolverine | +1 @ (1,4)", gameManager.getCreatureInfoAsString(5));
+    }
+
+
 }

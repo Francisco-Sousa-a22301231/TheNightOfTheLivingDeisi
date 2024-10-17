@@ -79,10 +79,12 @@ public class Character {
     public void pickUpEquipment(Equipment equipment) {
         this.equipment = equipment;
         equipment.gotPickedUp();
+        equipmentCount++;
     }
 
     public void destroyEquipment(Equipment equipment) {
         equipment.gotDestroyed();
+        equipmentCount++;
     }
 
     @Override
