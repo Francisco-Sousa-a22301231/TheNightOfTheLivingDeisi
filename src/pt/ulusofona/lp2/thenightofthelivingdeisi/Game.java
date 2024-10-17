@@ -86,11 +86,30 @@ public class Game {
     }
 
     public boolean move(int column0, int line0, int column1, int line1) {
-        return false; // TODO: Implement move logic
+        int id0 = searchCoordinates(column0,line0);
+        int id1 = searchCoordinates(column1,line1);
+        if (id0 <= 0) {
+            return false;
+        } else if (id1 <= 0) {
+            // TODO move verification of coordinates
+            Character c0 = getCharacter(id0);
+            c0.changeCoordinates(column1, line1);
+            removeFromCoordinates(column0, line0);
+            if (id1 < 0) {
+                Equipment e = getEquipment(id1);
+                if (c0.getTeam() == 1) {
+                    c0.pickUpEquipment(e);
+                } else {
+                    c0.destroyEquipment(e);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
-    public boolean verifyMove(int column0, int line0, int column1, int line1) {
-        return false; // TODO: Implement verify move logic
+    public void removeFromCoordinates(int x, int y) {
+        board[x][y] = 0;
     }
 
     public int searchCoordinates(int columns, int lines) {

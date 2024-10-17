@@ -43,8 +43,9 @@ public class Character {
         return equipment != null && equipment.getTipo() == equipmentTypeId;
     }
 
-    public boolean move(int column, int line) {
-        return false;
+    public void changeCoordinates(int column, int line) {
+         this.column = column;
+         this.line = line;
     }
 
     public String getName() {

@@ -84,6 +84,9 @@ public class TestGameManager {
         assertEquals("E:-1", gameManager.getSquareInfo(0,4));
         assertEquals("", gameManager.getSquareInfo(0,5));
         assertEquals("", gameManager.getSquareInfo(7,8));
+        assertFalse( gameManager.hasEquipment(2,1));
+        assertFalse( gameManager.hasEquipment(0,1));
+        assertFalse( gameManager.gameIsOver());
     }
 
     @Test public void testGame_nofile() {
