@@ -38,7 +38,7 @@ public class TestGameManager {
         result[3] = "3";
         result[4] = null;
         assertEquals(Arrays.toString(result), Arrays.toString(gameManager.getEquipmentInfo(-2)));
-        assertEquals("-2 | Espada samurai @ (4, 3)", gameManager.getEquipmentInfoAsString(-2));
+        assertEquals("-2 | Espada samurai @ (4,3)", gameManager.getEquipmentInfoAsString(-2));
         assertEquals("E:-2", gameManager.getSquareInfo(4,3));
     }
 

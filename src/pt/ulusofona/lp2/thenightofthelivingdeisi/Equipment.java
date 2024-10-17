@@ -62,7 +62,7 @@ public class Equipment {
 
     @Override
     public String toString() {
-        if (!inPlay) {
+        if (!inPlay || beingUsed) {
             return null;
         }
         if (type == 0) {
