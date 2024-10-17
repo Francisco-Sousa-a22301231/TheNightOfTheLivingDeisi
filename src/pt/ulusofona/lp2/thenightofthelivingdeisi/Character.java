@@ -25,10 +25,10 @@ public class Character {
         String[] info = new String[6];
         info[0] = Integer.toString(id);
         switch (team) {
-            case 0 ->
-                info[1] = "H";
             case 1 ->
-                info[1] = "Z";
+                info[1] = "Humano";
+            case 0 ->
+                info[1] = "Zombie";
             default ->
                 info[1] = "";
         }

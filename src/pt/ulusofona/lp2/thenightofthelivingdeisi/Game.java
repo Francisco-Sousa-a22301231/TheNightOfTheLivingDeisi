@@ -67,7 +67,7 @@ public class Game {
             return "";
         } else if (id > 0) {
             Character c = getCharacter(id);
-            if (c.getTeam() == 0) {
+            if (c.getTeam() == 1) {
                 return "H:" + id;
             } else {
                 return "Z:" + id;
