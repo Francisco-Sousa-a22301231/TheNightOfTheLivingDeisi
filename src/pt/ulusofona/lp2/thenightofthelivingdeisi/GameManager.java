@@ -135,7 +135,8 @@ public class GameManager {
     }
 
     public boolean move(int column0, int line0, int column1, int line1) {
-        return game.move(column0, line0, column1, line1);
+        boolean result = game.move(column0, line0, column1, line1);
+        return result;
     }
 
     public boolean gameIsOver() {

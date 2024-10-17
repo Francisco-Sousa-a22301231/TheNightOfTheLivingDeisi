@@ -90,9 +90,9 @@ public class Character {
     @Override
     public String toString() {
         if (team == 1) {
-            return id + " | Humano | " + name + " | +" + equipmentCount + " @ (" + column + "," + line + ")";
+            return id + " | Humano | " + name + " | +" + equipmentCount + " @ (" + column + ", " + line + ")";
         } else {
-            return id + " | Zombie | " + name + " | -" + equipmentCount + " @ (" + column + "," + line + ")";
+            return id + " | Zombie | " + name + " | -" + equipmentCount + " @ (" + column + ", " + line + ")";
         }
 
     }

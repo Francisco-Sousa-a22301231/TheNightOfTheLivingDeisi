@@ -79,6 +79,7 @@ public class Game {
 
     public void addNewPlay() {
         changeTeam();
+        numberOfPlays++;
         if (movesToChangeDay == 0) {
             changeTime();
             movesToChangeDay = 1;
