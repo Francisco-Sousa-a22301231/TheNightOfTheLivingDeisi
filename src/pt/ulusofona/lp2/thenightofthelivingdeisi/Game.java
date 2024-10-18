@@ -116,8 +116,8 @@ public class Game {
         return false;
     }
 
-    public void removeFromCoordinates(int x, int y) {
-        board[x][y] = 0;
+    public void removeFromCoordinates(int column, int line) {
+        board[column][line] = 0;
     }
 
     public int searchCoordinates(int columns, int lines) {
