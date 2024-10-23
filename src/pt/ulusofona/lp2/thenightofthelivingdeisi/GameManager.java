@@ -63,7 +63,6 @@ public class GameManager {
             game = new Game(columns, lines, startingTeamId, characters, equipments);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -87,11 +86,11 @@ public class GameManager {
         return game.isDay();
     }
 
-    public String getSquareInfo(int x, int y) {
-        if (x >= game.getColumns() || y >= game.getLines()) {
+    public String getSquareInfo(int column, int line) {
+        if (column >= game.getColumns() || line >= game.getLines()) {
             return "";
         }
-        return game.getSquareInfo(x, y);
+        return game.getSquareInfo(column, line);
     }
 
     public String[] getCreatureInfo(int id) {
