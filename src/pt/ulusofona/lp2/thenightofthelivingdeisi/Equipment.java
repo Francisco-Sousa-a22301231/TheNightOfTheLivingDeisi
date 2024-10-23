@@ -35,14 +35,6 @@ public class Equipment {
         return id;
     }
 
-    public boolean isInPlay() {
-        return inPlay;
-    }
-
-    public boolean isBeingUsed() {
-        return beingUsed;
-    }
-
     public int getLine() {
         return line;
     }

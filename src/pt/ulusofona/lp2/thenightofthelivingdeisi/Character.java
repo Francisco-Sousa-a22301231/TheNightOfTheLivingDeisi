@@ -60,20 +60,12 @@ public class Character {
         return team;
     }
 
-    public int getEquipmentCount() {
-        return equipmentCount;
-    }
-
     public int getColumn() {
         return column;
     }
 
     public int getLine() {
         return line;
-    }
-
-    public boolean isInPlay() {
-        return inPlay;
     }
 
     public void pickUpEquipment(Equipment equipment) {

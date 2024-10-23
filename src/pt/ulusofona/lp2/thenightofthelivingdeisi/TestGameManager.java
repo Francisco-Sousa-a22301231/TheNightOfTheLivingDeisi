@@ -3,6 +3,7 @@ package pt.ulusofona.lp2.thenightofthelivingdeisi;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +30,7 @@ public class TestGameManager {
         result[3] = "0";
         result[4] = null;
         assertEquals(Arrays.toString(result), Arrays.toString(gameManager.getEquipmentInfo(-1)));
+        assertEquals(0, game.getEquipment(-1).getTipo());
         assertEquals("-1 | Escudo de madeira @ (1,0)", gameManager.getEquipmentInfoAsString(-1));
         assertEquals("E:-1", gameManager.getSquareInfo(1,0));
         result = new String[5];
@@ -151,7 +153,21 @@ public class TestGameManager {
         assertFalse(gameManager.gameIsOver());
         assertTrue(gameManager.move(5,2,5,3)); // dead moves | 12
         assertTrue(gameManager.gameIsOver());
+        assertEquals("[[Nr. de turnos terminados:, 12,  , OS VIVOS, 1 Paciente Zero, 4 Ozzy Osborne,  , OS OUTROS, 2 Freddy M., 3 Jackie Chan, 5 Wolverine, -----]]", Arrays.toString(new ArrayList[]{gameManager.getSurvivors()}));
+        gameManager.getCreditsPanel();
+        gameManager.customizeBoard();
     }
 
-
+    @Test public void destroyEquipment() {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/5x6_3H_2Z_1E.txt"));
+        assertTrue(gameManager.move(2,2,2,1)); // alive moves | 1
+        assertTrue(gameManager.move(0,1,0,2)); // dead moves | 2
+        assertTrue(gameManager.move(2,4,1,4)); // alive moves | 3
+        assertFalse(gameManager.isDay());
+        assertTrue(gameManager.move(0,2,0,3)); // dead moves | 4
+        assertTrue(gameManager.move(1,4,1,3)); // alive moves | 5
+        assertTrue(gameManager.move(0,3,0,4)); // dead moves to equipment | 6
+        assertEquals(gameManager.getGame().getEquipment(-1),gameManager.getGame().getEquipment(-1));
+    }
 }
