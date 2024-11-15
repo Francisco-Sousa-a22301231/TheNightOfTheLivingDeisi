@@ -25,5 +25,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="LP2-GuiViewer2425-p2-1.0.0" level="project" />
+    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
 </module>

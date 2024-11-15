@@ -3,8 +3,10 @@ package pt.ulusofona.lp2.thenightofthelivingdeisi;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -140,27 +142,20 @@ public class TestGameManager {
 
     @Test public void testGetWorldSize() {
         GameManager gameManager = new GameManager();
-        gameManager.loadGame(new File("test-files/5x6_3H_2Z_1E.txt"));
+        gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         int[] worldSize = gameManager.getWorldSize();
-        assertEquals(5, worldSize[0]);
-        assertEquals(6, worldSize[1]);
+        assertEquals(7, worldSize[0]);
+        assertEquals(7, worldSize[1]);
     }
 
     @Test public void testGetCurrentTeam() {
         GameManager gameManager = new GameManager();
-        gameManager.loadGame(new File("test-files/5x6_3H_2Z_1E.txt"));
+        gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         int team = gameManager.getCurrentTeamId();
-        assertEquals(1, team);
+        assertEquals(10, team);
     }
 
-    @Test public void testIsDay() {
-        GameManager gameManager = new GameManager();
-        boolean day = gameManager.isDay();
-        assertTrue(day);
-        gameManager.loadGame(new File("test-files/5x6_3H_2Z_1E.txt"));
-        day = gameManager.isDay();
-        assertTrue(day);
-    }
+
 
     @Test public void testMove() {
         GameManager gameManager = new GameManager();
@@ -208,16 +203,65 @@ public class TestGameManager {
         assertEquals("E:-1", gameManager.getSquareInfo(6,3));
     }
 
-    @Test public void destroyEquipment() {
+    @Test public void testSaveAndLoad() throws IOException {
         GameManager gameManager = new GameManager();
-        gameManager.loadGame(new File("test-files/5x6_3H_2Z_1E.txt"));
-        assertTrue(gameManager.move(2,2,2,1)); // alive moves | 1
-        assertTrue(gameManager.move(0,1,0,2)); // dead moves | 2
-        assertTrue(gameManager.move(2,4,1,4)); // alive moves | 3
-        assertFalse(gameManager.isDay());
-        assertTrue(gameManager.move(0,2,0,3)); // dead moves | 4
-        assertTrue(gameManager.move(1,4,1,3)); // alive moves | 5
-        assertTrue(gameManager.move(0,3,0,4)); // dead moves to equipment | 6
-        assertEquals(gameManager.getGame().getEquipment(-1),gameManager.getGame().getEquipment(-1));
+        gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
+        File file = new File("test-files/testSave.txt");
+        assertEquals("Z:1", gameManager.getSquareInfo(3,3));
+        assertTrue(gameManager.move(3,3,2,3));
+        assertEquals("", gameManager.getSquareInfo(3,3));
+        assertEquals("H:7", gameManager.getSquareInfo(4,3));
+        assertTrue(gameManager.move(4,3,2,1));
+        assertEquals("", gameManager.getSquareInfo(4,3));
+        assertEquals("H:7", gameManager.getSquareInfo(2,1));
+        gameManager.saveGame(file);
+        gameManager.loadGame(new File("test-files/testSave.txt"));
+        assertEquals("", gameManager.getSquareInfo(4,3));
+        assertEquals("H:7", gameManager.getSquareInfo(2,1));
+        assertEquals("", gameManager.getSquareInfo(3,3));
+    }
+
+    @Test public void testGameIsOver() {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
+        assertFalse(gameManager.gameIsOver());
+        assertTrue(gameManager.move(1,1,1,2)); // dead moves | 1
+        assertTrue(gameManager.move(3,4,2,4)); // alive moves | 2
+        assertFalse(gameManager.move(1,2,2,2)); // dead tries move to dog
+        assertTrue(gameManager.move(3,3,2,3)); // dead moves | 3
+        assertTrue(gameManager.move(2,2,2,1)); // alive moves | 4
+        assertTrue(gameManager.move(1,2,1,1)); // dead moves | 5
+        assertTrue(gameManager.move(4,3,4,2)); // alive moves | 6
+        assertFalse(gameManager.move(1,1,2,1)); // dead tries move
+        assertTrue(gameManager.move(2,3,1,3)); // dead moves | 7
+        assertFalse(gameManager.gameIsOver());
+        assertTrue(gameManager.move(2,1,3,1)); // alive moves | 8
+        assertTrue(gameManager.gameIsOver());
+        assertEquals("E:-3", gameManager.getSquareInfo(2,1));
+        assertEquals("H:10", gameManager.getSquareInfo(3,1));
+    }
+
+    @Test public void testGameIsOver2SH() {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
+        assertTrue(gameManager.move(1, 1, 2, 1));
+        assertTrue(gameManager.move(2, 2, 4, 2));
+        assertTrue(gameManager.move(4, 5, 4, 4));
+        assertTrue(gameManager.move(4, 2, 4, 0));
+        assertTrue(gameManager.move(3, 3, 4, 3));
+        assertTrue(gameManager.move(4, 0, 6, 0));
+        assertTrue(gameManager.move(4, 4, 3, 4));
+        assertTrue(gameManager.move(6, 5, 6, 3));
+        assertTrue(gameManager.move(5, 3, 5, 4));
+        assertTrue(gameManager.move(6, 3, 6, 1));
+        assertTrue(gameManager.move(5, 4, 5, 5));
+        assertTrue(gameManager.move(6, 1, 6, 0));
+        assertFalse(gameManager.gameIsOver());
+        assertTrue(gameManager.move(5, 5, 5, 6));
+        assertTrue(gameManager.gameIsOver());
+        List<Integer> ids = new ArrayList<>();
+        ids.add(10);
+        ids.add(9);
+        assertEquals(ids, gameManager.getIdsInSafeHaven());
     }
 }

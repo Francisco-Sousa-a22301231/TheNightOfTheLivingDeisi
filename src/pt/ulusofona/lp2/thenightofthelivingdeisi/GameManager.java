@@ -1,12 +1,10 @@
 package pt.ulusofona.lp2.thenightofthelivingdeisi;
 
 import javax.swing.*;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
 
 public class GameManager {
     private Game game;
@@ -34,9 +32,11 @@ public class GameManager {
             int numberOfCharacters = 0;
             int numberOfEquipments = 0;
             int numberOfSafeHeavens = 0;
-            HashMap<Integer,Character> characters = new HashMap<>();
-            HashMap<Integer,Equipment> equipments = new HashMap<>();
-            ArrayList<SafeHeaven> safeHeavens = new ArrayList<>();
+            HashMap<Integer, Character> characters = new HashMap<>();
+            HashMap<Integer, Equipment> equipments = new HashMap<>();
+            ArrayList<SafeHaven> safeHavens = new ArrayList<>();
+            ArrayList<String> moves = new ArrayList<>();
+
             while ((line = br.readLine()) != null) {
                 if (lineNumber == 1) {
                     parts = line.split(" ");
@@ -49,7 +49,9 @@ public class GameManager {
                 } else if (lineNumber == 4) {
                     while (lineNumber < (4 + numberOfCharacters)) {
                         parts = line.split(" : ");
-                        characters.put(Integer.parseInt(parts[0]), newCharacter(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), parts[3], Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
+                        characters.put(Integer.parseInt(parts[0]),
+                                newCharacter(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
+                                        parts[3], Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
                         lineNumber++;
                         line = br.readLine();
                     }
@@ -58,7 +60,9 @@ public class GameManager {
                     line = br.readLine();
                     while (lineNumber < (5 + numberOfCharacters + numberOfEquipments)) {
                         parts = line.split(" : ");
-                        equipments.put(Integer.parseInt(parts[0]), newEquipment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])));
+                        equipments.put(Integer.parseInt(parts[0]),
+                                newEquipment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
+                                        Integer.parseInt(parts[3])));
                         lineNumber++;
                         line = br.readLine();
                     }
@@ -67,16 +71,25 @@ public class GameManager {
                     line = br.readLine();
                     while (lineNumber < (6 + numberOfCharacters + numberOfEquipments + numberOfSafeHeavens)) {
                         parts = line.split(" : ");
-                        safeHeavens.add(new SafeHeaven(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+                        safeHavens.add(new SafeHaven(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
                         lineNumber++;
                         line = br.readLine();
+                    }
+                    if (line != null && !line.trim().isEmpty()) {
+                        moves.add(line);
+                        while ((line = br.readLine()) != null) {
+                            moves.add(line);
+                        }
                     }
                 }
                 lineNumber++;
             }
-            game = new Game(columns, lines, startingTeamId, aliveId, deadId, characters, equipments, safeHeavens);
-        } catch (IOException e){}
+            game = new Game(columns, lines, startingTeamId, aliveId, deadId, characters, equipments, safeHavens, moves);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     private Character newCharacter(int id, int team, int type, String name, int column, int line) {
         return switch (type) {
@@ -170,15 +183,43 @@ public class GameManager {
         return result;
     }
 
+    public List<Integer> getIdsInSafeHaven() {
+
+        return game.getIdsInSafeHaven();
+    }
+
+    public void saveGame(File file) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(this.file));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                bw.write(line);
+                bw.newLine();
+            }
+
+            ArrayList<String> moves = game.getMoves();
+
+            for (int i = 0; i < moves.size(); i++) {
+                bw.write(moves.get(i));
+                if (i < moves.size() - 1) {
+                    bw.newLine();
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
+    }
+
     public boolean gameIsOver() {
-        return game.getNumberOfPlays() == 120; // todo
+        return game.getBoringMoveCount() >= 8 || game.onlyOneTeamRemaining();
     }
 
     public ArrayList<String> getSurvivors() {
         ArrayList<String> survivors = new ArrayList<>();
         HashMap<Integer,ArrayList<Character>> players = game.getSurvivorsAndOthers();
         survivors.add("Nr. de turnos terminados:");
-        survivors.add("12");
+        survivors.add("" + game.getNumberOfPlays());
         survivors.add(" ");
         survivors.add("OS VIVOS");
         for (Character c : players.get(0)) {

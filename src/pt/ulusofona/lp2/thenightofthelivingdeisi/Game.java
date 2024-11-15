@@ -2,6 +2,7 @@ package pt.ulusofona.lp2.thenightofthelivingdeisi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Game {
     private int[][] board;
@@ -14,16 +15,18 @@ public class Game {
     private int initialTeam;
     private boolean isDay;
     private int movesToChangeDay;
+    private int boringMoveCount = 0;
     private HashMap<Integer,Character> characters;
     private HashMap<Integer,Equipment> equipments;
-    private ArrayList<SafeHeaven> safeHeavens = new ArrayList<>();
+    private ArrayList<SafeHaven> safeHavens = new ArrayList<>();
+    private ArrayList<String> moves = new ArrayList<>();
 
-    public Game(int columns, int lines, int initialTeam, int aliveId, int deadId, HashMap<Integer,Character> characters, HashMap<Integer,Equipment> equipments, ArrayList<SafeHeaven> safeHeavens) {
+    public Game(int columns, int lines, int initialTeam, int aliveId, int deadId, HashMap<Integer,Character> characters, HashMap<Integer,Equipment> equipments, ArrayList<SafeHaven> safeHavens, ArrayList<String> moves) {
         this.columns = columns;
         this.lines = lines;
         this.characters = characters;
         this.equipments = equipments;
-        this.safeHeavens = safeHeavens;
+        this.safeHavens = safeHavens;
         this.isDay = true;
         this.numberOfPlays = 0;
         this.movesToChangeDay = 1;
@@ -34,8 +37,35 @@ public class Game {
         this.board = new int[columns][lines];
         setUpCharacters();
         setUpEquipments();
-        setUpSafeHeavens();
+        setUpSafeHavens();
+        setUpMoves(moves);
+    }
 
+    public ArrayList<String> getMoves() {
+        return moves;
+    }
+
+    public void addNewMoveString(String move) {
+        moves.add(move);
+    }
+
+    public void setUpMoves(ArrayList<String> moves) {
+        if (moves != null && !moves.isEmpty()) {
+            for (String m : moves) {
+                if (m.matches("\\(\\d+,\\d+\\):\\(\\d+,\\d+\\)")) {
+                    String[] parts = m.split(":");
+                    String[] start = parts[0].replaceAll("[()]", "").split(",");
+                    String[] end = parts[1].replaceAll("[()]", "").split(",");
+                    int column0 = Integer.parseInt(start[0]);
+                    int line0 = Integer.parseInt(start[1]);
+                    int column1 = Integer.parseInt(end[0]);
+                    int line1 = Integer.parseInt(end[1]);
+                    move(column0, line0, column1, line1);
+                } else {
+                    System.err.println("Invalid move format: " + m);
+                }
+            }
+        }
     }
 
     public int getInitialTeam() {
@@ -54,10 +84,29 @@ public class Game {
         }
     }
 
-    public void setUpSafeHeavens() {
-        for (SafeHeaven sh : safeHeavens) {
+    public void setUpSafeHavens() {
+        for (SafeHaven sh : safeHavens) {
             board[sh.getColumn()][sh.getLine()] = sh.getId();
         }
+    }
+
+    public SafeHaven getSafeHaven(int column, int line) {
+        for (SafeHaven sh : safeHavens) {
+            if (sh.getColumn() == column && sh.getLine() == line) {
+                return sh;
+            }
+        }
+        return null;
+    }
+
+    public List<Integer> getIdsInSafeHaven() {
+        List<Integer> ids = new ArrayList<Integer>();
+        for (SafeHaven sh : safeHavens) {
+            for (Character character : sh.getCharacters()) {
+                ids.add(character.getId());
+            }
+        }
+        return ids;
     }
 
     public void changeTime() {
@@ -94,7 +143,7 @@ public class Game {
         return "";
     }
 
-    public void addNewPlay() {
+    public void addNewPlay(String moves) {
         changeTeam();
         numberOfPlays++;
         if (movesToChangeDay == 0) {
@@ -103,6 +152,7 @@ public class Game {
         } else {
             movesToChangeDay--;
         }
+        addNewMoveString(moves);
     }
 
     private boolean elderCantMove(Character character) {
@@ -124,20 +174,25 @@ public class Game {
 
         Character c0 = getCharacter(id0);
         Character c1 = getCharacter(id1);
+        SafeHaven sh = getSafeHaven(column1, line1);
 
         if (!canCharacterMove(c0, column0, line0, column1, line1)) {
             return false;
         }
 
-        if (c1 == null) {
+        if (c1 == null && sh == null) {
             handleEmptyDestination(c0, id0, id1, column0, line0, column1, line1);
+        } else if (c1 == null) {
+            handleHeavenEntry(sh, c0, column0, line0);
         } else {
-            handleCombat(c0, c1, id0, column0, line0, column1, line1);
+            if (!handleCombat(c0, c1, id0, column0, line0, column1, line1)) {
+                return false;
+            }
         }
 
-        handleElderEquipment(c0);
+        handleElderAndDogEquipment(c0);
 
-        addNewPlay();
+        addNewPlay("(" + column0 + "," + line0 + "):(" + column1 + "," + line1 + ")");
         return true;
     }
 
@@ -164,46 +219,63 @@ public class Game {
                 c0.destroyEquipment(e);
             }
         }
+        boringMoveCount++;
+    }
+
+    private void handleHeavenEntry(SafeHaven sh, Character c0, int column, int line) {
+        sh.addEntry(c0);
+        removeFromCoordinates(column, line);
+        characters.remove(c0.getId());
+        boringMoveCount++;
     }
 
     private boolean canPickUpEquipment(Character c0, Equipment e) {
-        return c0.getType() != 0 || !e.isOffensive();
+        return c0.getType() != 0 || c0.getType() != 2 || c0.getType() != 3|| !e.isOffensive();
     }
 
-    private void handleCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
+    private boolean handleCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
         if (c0.getTeam() == aliveId && c1.getTeam() == deadId) {
-            handleAliveVsDeadCombat(c0, c1, id0, column0, line0, column1, line1);
+            return handleAliveVsDeadCombat(c0, c1, id0, column0, line0, column1, line1);
         } else if (c0.getTeam() == deadId && c1.getTeam() == aliveId) {
-            handleDeadVsAliveCombat(c0, c1, column0, line0);
+            return handleDeadVsAliveCombat(c0, c1, column0, line0);
         }
+        return false;
     }
 
-    private void handleAliveVsDeadCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
+    private boolean handleAliveVsDeadCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
         if (c0.hasEquipment(0) || c0.hasEquipment(3) || c0.doesntHaveEquipment()) {
-            return;
+            return false;
         }
-
         if ((c0.hasEquipment(2) && c0.shoots()) || c0.hasEquipment(1)) {
             board[column1][line1] = id0;
             c0.changeCoordinates(column1, line1);
             removeFromCoordinates(column0, line0);
             characters.remove(c1.getId());
+            boringMoveCount = 0;
+            return true;
         }
+        return false;
     }
 
-    private void handleDeadVsAliveCombat(Character c0, Character c1, int column0, int line0) {
+    private boolean handleDeadVsAliveCombat(Character c0, Character c1, int column0, int line0) {
+        if (c1.getType() == 3) {
+            return false;
+        }
         if (c1.hasEquipment(0) || (c1.hasEquipment(3) && c1.usesBleach())) {
-            addNewPlay();
+            boringMoveCount++;
         } else if ((c1.hasEquipment(1) || c1.hasEquipment(2)) && c1.shoots()) {
             removeFromCoordinates(column0, line0);
             characters.remove(c0.getId());
+            boringMoveCount = 0;
         } else {
             c1.turnsIntoZombie();
+            boringMoveCount = 0;
         }
+        return true;
     }
 
-    private void handleElderEquipment(Character c0) {
-        if (c0.getTeam() == aliveId && c0.getType() == 2 && c0.getEquipment() != null) {
+    private void handleElderAndDogEquipment(Character c0) {
+        if (c0.getTeam() == aliveId && (c0.getType() == 2 || c0.getType() == 3) && c0.getEquipment() != null) {
             Equipment e = c0.getEquipment();
             if (c0.getColumn() != e.getColumn() || c0.getLine() != e.getLine()) {
                 board[e.getColumn()][e.getLine()] = e.getId();
@@ -211,10 +283,6 @@ public class Game {
             }
         }
     }
-
-
-
-
 
     public void removeFromCoordinates(int column, int line) {
         board[column][line] = 0;
@@ -252,6 +320,23 @@ public class Game {
         return lines;
     }
 
+    public int getBoringMoveCount() {
+        return boringMoveCount;
+    }
+
+    public boolean onlyOneTeamRemaining() {
+        int aliveCount = 0;
+        int deadCount = 0;
+        for (Character c : characters.values()) {
+            if (c.getTeam() == aliveId) {
+                aliveCount++;
+            } else if (c.getTeam() == deadId) {
+                deadCount++;
+            }
+        }
+        return deadCount == 0 || aliveCount == 0;
+    }
+
     public HashMap<Integer, ArrayList<Character>> getSurvivorsAndOthers() {
         HashMap<Integer, ArrayList<Character>> players = new HashMap<>();
         ArrayList<Character> survivors = new ArrayList<>();
@@ -263,7 +348,10 @@ public class Game {
                 others.add(c);
             }
         }
-        players.put(0, survivors); // todo
+        for (SafeHaven sh : safeHavens) {
+            survivors.addAll(sh.getCharacters());
+        }
+        players.put(0, survivors);
         players.put(1, others);
         return players;
     }
