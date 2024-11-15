@@ -11,6 +11,9 @@ import java.io.IOException;
 public class GameManager {
     private Game game;
     private File file;
+    private int aliveId = 20;
+    private int deadId = 10;
+
 
     public GameManager() {
     }
@@ -19,7 +22,7 @@ public class GameManager {
         return game;
     }
 
-    public boolean loadGame(File file) {
+    public void loadGame(File file) {
         this.file = file;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = "";
@@ -30,8 +33,10 @@ public class GameManager {
             int startingTeamId = 0;
             int numberOfCharacters = 0;
             int numberOfEquipments = 0;
+            int numberOfSafeHeavens = 0;
             HashMap<Integer,Character> characters = new HashMap<>();
             HashMap<Integer,Equipment> equipments = new HashMap<>();
+            ArrayList<SafeHeaven> safeHeavens = new ArrayList<>();
             while ((line = br.readLine()) != null) {
                 if (lineNumber == 1) {
                     parts = line.split(" ");
@@ -44,7 +49,7 @@ public class GameManager {
                 } else if (lineNumber == 4) {
                     while (lineNumber < (4 + numberOfCharacters)) {
                         parts = line.split(" : ");
-                        characters.put(Integer.parseInt(parts[0]), new Character(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), parts[2], Integer.parseInt(parts[3]), Integer.parseInt(parts[4])));
+                        characters.put(Integer.parseInt(parts[0]), newCharacter(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), parts[3], Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
                         lineNumber++;
                         line = br.readLine();
                     }
@@ -53,18 +58,45 @@ public class GameManager {
                     line = br.readLine();
                     while (lineNumber < (5 + numberOfCharacters + numberOfEquipments)) {
                         parts = line.split(" : ");
-                        equipments.put(Integer.parseInt(parts[0]), new Equipment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])));
+                        equipments.put(Integer.parseInt(parts[0]), newEquipment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])));
+                        lineNumber++;
+                        line = br.readLine();
+                    }
+                    numberOfSafeHeavens = Integer.parseInt(line);
+                    lineNumber++;
+                    line = br.readLine();
+                    while (lineNumber < (6 + numberOfCharacters + numberOfEquipments + numberOfSafeHeavens)) {
+                        parts = line.split(" : ");
+                        safeHeavens.add(new SafeHeaven(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
                         lineNumber++;
                         line = br.readLine();
                     }
                 }
                 lineNumber++;
             }
-            game = new Game(columns, lines, startingTeamId, characters, equipments);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+            game = new Game(columns, lines, startingTeamId, aliveId, deadId, characters, equipments, safeHeavens);
+        } catch (IOException e){}
+    }
+
+    private Character newCharacter(int id, int team, int type, String name, int column, int line) {
+        return switch (type) {
+            case 0 -> new Child(id, team, name, column, line, aliveId, deadId);
+            case 1 -> new Adult(id, team, name, column, line, aliveId, deadId);
+            case 2 -> new Elder(id, team, name, column, line, aliveId, deadId);
+            case 3 -> new Dog(id, name, column, line, aliveId, deadId);
+            case 4 -> new Vampire(id, name, column, line, aliveId, deadId);
+            default -> null;
+        };
+    }
+
+    private Equipment newEquipment(int id, int type, int column, int line) {
+        return switch (type) {
+            case 0 -> new Shield(id, type, column, line);
+            case 1 -> new Sword(id, type, column, line);
+            case 2 -> new Pistol(id, type, column, line);
+            case 3 -> new Bleach(id, type, column, line);
+            default -> null;
+        };
     }
 
     public int getInitialTeamId() {
@@ -139,7 +171,7 @@ public class GameManager {
     }
 
     public boolean gameIsOver() {
-        return game.getNumberOfPlays() == 12;
+        return game.getNumberOfPlays() == 120; // todo
     }
 
     public ArrayList<String> getSurvivors() {

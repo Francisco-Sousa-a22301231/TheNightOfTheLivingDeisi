@@ -1,20 +1,22 @@
 package pt.ulusofona.lp2.thenightofthelivingdeisi;
 
 public class Equipment {
-    private int id;
-    private int type;
-    private boolean inPlay;
-    private boolean beingUsed;
-    private int column;
-    private int line;
+    protected int id;
+    protected int type;
+    protected boolean inPlay;
+    protected boolean beingUsed;
+    protected int column;
+    protected int line;
+    protected boolean offensive;
 
-    public Equipment(int id, int tipo, int column, int line) {
+    public Equipment(int id, int type, int column, int line, boolean offensive) {
         this.id = id;
-        this.type = tipo;
+        this.type = type;
         this.column = column;
         this.line = line;
         this.inPlay = true;
         this.beingUsed = false;
+        this.offensive = offensive;
     }
 
     public String[] getEquipmentInfo() {
@@ -25,6 +27,15 @@ public class Equipment {
         info[3] = Integer.toString(line);
         info[4] = null;
         return info;
+    }
+
+    public String getEquipmentInfoAsString() {
+        if (type == 0) {
+            return id + " | Escudo de madeira @ (" + column + "," + line + ')';
+        } else if (type == 1) {
+            return id + " | Espada samurai @ (" + column + "," + line + ')';
+        }
+        return "Wrong type";
     }
 
     public int getTipo() {
@@ -50,6 +61,22 @@ public class Equipment {
     public void gotDestroyed() {
         inPlay = false;
         beingUsed = false;
+    }
+
+    public boolean isOffensive() {
+        return offensive;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public boolean shoots() {
+        return false;
+    }
+
+    public boolean bleachCanBeUsed() {
+        return false;
     }
 
     @Override
