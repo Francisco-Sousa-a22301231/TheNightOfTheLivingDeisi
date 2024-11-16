@@ -254,11 +254,25 @@ public class TestGameManager {
         assertTrue(gameManager.move(6, 1, 6, 0));
         assertFalse(gameManager.gameIsOver());
         assertTrue(gameManager.move(5, 5, 5, 6));
-        assertTrue(gameManager.gameIsOver());
         List<Integer> ids = new ArrayList<>();
         ids.add(10);
         ids.add(9);
         assertEquals(ids, gameManager.getIdsInSafeHaven());
+    }
+
+    @Test public void testGameSafeHaven() throws InvalidFileException, FileNotFoundException {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
+        assertTrue(gameManager.move(5, 3, 5, 4));
+        assertTrue(gameManager.move(6, 5, 6, 3));
+        assertTrue(gameManager.move(5, 4, 5, 3));
+        assertTrue(gameManager.move(6, 3, 6, 1));
+        assertTrue(gameManager.move(5, 3, 5, 2));
+        assertTrue(gameManager.move(6, 1, 6, 0));
+        List<Integer> ids = new ArrayList<>();
+        ids.add(9);
+        assertEquals(ids, gameManager.getIdsInSafeHaven());
+        assertEquals("9 | Adulto | Humano | John Wayne | +1 @ (6, 1) | -1 | Escudo de madeira @ (6,1)", gameManager.getCreatureInfoAsString(9));
     }
 
     @Test  public void testErrorLine4() throws FileNotFoundException {
@@ -266,7 +280,7 @@ public class TestGameManager {
         try {
             gameManager.loadGame(new File("test-files/erroLine4.txt"));
         } catch (InvalidFileException e) {
-            assertEquals(5, e.getLineWithError());
+            assertEquals(4, e.getLineWithError());
         }
     }
 

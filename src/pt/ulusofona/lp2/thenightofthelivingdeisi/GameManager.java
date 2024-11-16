@@ -169,7 +169,7 @@ public class GameManager {
 
     public String getCreatureInfoAsString(int id) {
         Character character = game.getCharacter(id);
-        if (character!= null) {
+        if (character != null) {
             return character.toString();
         }
         return "";

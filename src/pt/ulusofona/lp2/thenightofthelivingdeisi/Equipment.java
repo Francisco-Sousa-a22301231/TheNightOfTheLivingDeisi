@@ -79,6 +79,11 @@ public class Equipment {
         return false;
     }
 
+    public void moveEquipment(int column, int line) {
+        this.column = column;
+        this.line = line;
+    }
+
     @Override
     public String toString() {
         if (!inPlay || beingUsed) {

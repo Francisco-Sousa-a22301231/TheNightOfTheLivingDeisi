@@ -191,7 +191,7 @@ public class Game {
         }
 
         handleElderAndDogEquipment(c0);
-
+        moveEquipment(c0);
         addNewPlay("(" + column0 + "," + line0 + "):(" + column1 + "," + line1 + ")");
         return true;
     }
@@ -225,7 +225,6 @@ public class Game {
     private void handleHeavenEntry(SafeHaven sh, Character c0, int column, int line) {
         sh.addEntry(c0);
         removeFromCoordinates(column, line);
-        characters.remove(c0.getId());
         boringMoveCount++;
     }
 
@@ -281,6 +280,12 @@ public class Game {
                 board[e.getColumn()][e.getLine()] = e.getId();
                 c0.removeEquipment();
             }
+        }
+    }
+
+    private void moveEquipment(Character c) {
+        if (c.getEquipment()!= null) {
+            c.getEquipment().moveEquipment(c.getColumn(), c.getLine());
         }
     }
 
@@ -347,9 +352,6 @@ public class Game {
             } else if (c.getTeam() == deadId){
                 others.add(c);
             }
-        }
-        for (SafeHaven sh : safeHavens) {
-            survivors.addAll(sh.getCharacters());
         }
         players.put(0, survivors);
         players.put(1, others);
