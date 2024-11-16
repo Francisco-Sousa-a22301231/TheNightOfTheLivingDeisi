@@ -78,6 +78,14 @@ public class GameManager {
                     line = br.readLine();
                     while (lineNumber < (5 + numberOfCharacters + numberOfEquipments)) {
                         parts = line.split(" : ");
+                        if (parts.length != 4) {
+                            throw new InvalidFileException(lineNumber);
+                        }
+                        for (String part : parts) {
+                            if (part.isEmpty() || Objects.equals(part, "")) {
+                                throw new InvalidFileException(lineNumber);
+                            }
+                        }
                         equipments.put(Integer.parseInt(parts[0]),
                                 newEquipment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
                                         Integer.parseInt(parts[3])));
@@ -89,6 +97,9 @@ public class GameManager {
                     line = br.readLine();
                     while (lineNumber < (6 + numberOfCharacters + numberOfEquipments + numberOfSafeHeavens)) {
                         parts = line.split(" : ");
+                        if (parts.length != 2) {
+                            throw new InvalidFileException(lineNumber);
+                        }
                         safeHavens.add(new SafeHaven(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
                         lineNumber++;
                         line = br.readLine();

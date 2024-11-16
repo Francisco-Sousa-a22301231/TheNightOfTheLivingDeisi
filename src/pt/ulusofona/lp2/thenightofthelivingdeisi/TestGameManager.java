@@ -297,8 +297,7 @@ public class TestGameManager {
         GameManager gameManager = new GameManager();
         try {
             gameManager.loadGame(new File("test-files/naoExiste.txt"));
-        } catch (InvalidFileException e) {
-            fail();
+        } catch (FileNotFoundException e) {
         }
 
     }
