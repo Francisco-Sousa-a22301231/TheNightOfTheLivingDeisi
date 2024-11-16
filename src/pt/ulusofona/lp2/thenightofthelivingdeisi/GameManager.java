@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class GameManager {
     private Game game;
@@ -60,6 +61,11 @@ public class GameManager {
                         parts = line.split(" : ");
                         if (parts.length != 6) {
                             throw new InvalidFileException(lineNumber);
+                        }
+                        for (String part : parts) {
+                            if (part.isEmpty() || Objects.equals(part, "")) {
+                                throw new InvalidFileException(lineNumber);
+                            }
                         }
                         characters.put(Integer.parseInt(parts[0]),
                                 newCharacter(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),

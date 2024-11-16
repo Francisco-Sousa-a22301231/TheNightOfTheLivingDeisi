@@ -275,6 +275,15 @@ public class TestGameManager {
         assertEquals("9 | Adulto | Humano | John Wayne | +1 @ (6, 1) | -1 | Escudo de madeira @ (6,1)", gameManager.getCreatureInfoAsString(9));
     }
 
+    @Test  public void testNullString() throws InvalidFileException, FileNotFoundException {
+        GameManager gameManager = new GameManager();
+        try {
+            gameManager.loadGame(new File("test-files/nullString.txt"));
+        } catch (InvalidFileException e) {
+            assertEquals(4, e.getLineWithError());
+        }
+    }
+
     @Test  public void testErrorLine4() throws FileNotFoundException {
         GameManager gameManager = new GameManager();
         try {
