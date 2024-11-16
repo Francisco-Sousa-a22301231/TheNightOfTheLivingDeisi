@@ -20,7 +20,7 @@ public class GameManager {
         return game;
     }
 
-    public void loadGame(File file) {
+    public void loadGame(File file) throws FileNotFoundException, InvalidFileException {
         this.file = file;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = "";
@@ -40,15 +40,27 @@ public class GameManager {
             while ((line = br.readLine()) != null) {
                 if (lineNumber == 1) {
                     parts = line.split(" ");
+                    if (parts.length != 2) {
+                        throw new InvalidFileException(lineNumber);
+                    }
                     lines = Integer.parseInt(parts[0]);
                     columns = Integer.parseInt(parts[1]);
                 } else if (lineNumber == 2) {
                     startingTeamId = Integer.parseInt(line);
+                    if (startingTeamId != aliveId && startingTeamId != deadId ) {
+                        throw new InvalidFileException(lineNumber);
+                    }
                 } else if (lineNumber == 3) {
                     numberOfCharacters = Integer.parseInt(line);
+                    if (numberOfCharacters > columns * lines) {
+                        throw new InvalidFileException(lineNumber);
+                    }
                 } else if (lineNumber == 4) {
                     while (lineNumber < (4 + numberOfCharacters)) {
                         parts = line.split(" : ");
+                        if (parts.length != 6) {
+                            throw new InvalidFileException(lineNumber);
+                        }
                         characters.put(Integer.parseInt(parts[0]),
                                 newCharacter(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
                                         parts[3], Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
@@ -84,6 +96,7 @@ public class GameManager {
                 }
                 lineNumber++;
             }
+
             game = new Game(columns, lines, startingTeamId, aliveId, deadId, characters, equipments, safeHavens, moves);
         } catch (IOException e) {
             e.printStackTrace();
@@ -190,7 +203,7 @@ public class GameManager {
 
     public void saveGame(File file) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(this.file));
-             BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             String line;
 
             while ((line = br.readLine()) != null) {

@@ -1,7 +1,7 @@
 7 7
 10
 10
-1 : 10 : 0 : Melanie : 3 : 3
+1 : 0 : Melanie : 3 : 3
 2 : 10 : 1 : Walker : 5 : 3
 3 : 10 : 2 : Frankenstein : 4 : 5
 4 : 10 : 4 : Crawler : 0 : 1
