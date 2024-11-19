@@ -21,7 +21,7 @@ public class GameManager {
         return game;
     }
 
-    public void loadGame(File file) throws FileNotFoundException, InvalidFileException {
+    public void loadGame(File file) throws InvalidFileException, FileNotFoundException {
         this.file = file;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = "";
