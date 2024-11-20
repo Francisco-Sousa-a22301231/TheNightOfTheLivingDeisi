@@ -23,7 +23,7 @@ public class Bleach extends Equipment{
 
     @Override
     public String getEquipmentInfoAsString() {
-        return id + " | Lixívia @ (" + column + "," + line + ") | " + capacity + " litros";
+        return id + " | Lixívia @ (" + column + ", " + line + ") | " + capacity + " litros";
     }
 
 
@@ -32,6 +32,6 @@ public class Bleach extends Equipment{
         if (!inPlay || beingUsed) {
             return null;
         }
-        return id + " | Lixívia @ (" + column + "," + line + ") | " + capacity + " litros";
+        return id + " | Lixívia @ (" + column + ", " + line + ") | " + capacity + " litros";
     }
 }

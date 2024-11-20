@@ -37,7 +37,7 @@ public class TestGameManager {
         result[4] = null;
         assertEquals(Arrays.toString(result), Arrays.toString(gameManager.getEquipmentInfo(-1)));
         assertEquals(0, game.getEquipment(-1).getTipo());
-        assertEquals("-1 | Escudo de madeira @ (6,3)", gameManager.getEquipmentInfoAsString(-1));
+        assertEquals("-1 | Escudo de madeira @ (6, 3)", gameManager.getEquipmentInfoAsString(-1));
         assertEquals("E:-1", gameManager.getSquareInfo(6,3));
         assertEquals("SH", gameManager.getSquareInfo(6,0));
         assertEquals("SH", gameManager.getSquareInfo(0,6));
@@ -48,7 +48,7 @@ public class TestGameManager {
         result[3] = "0";
         result[4] = null;
         assertEquals(Arrays.toString(result), Arrays.toString(gameManager.getEquipmentInfo(-2)));
-        assertEquals("-2 | Espada samurai @ (2,0)", gameManager.getEquipmentInfoAsString(-2));
+        assertEquals("-2 | Espada samurai @ (2, 0)", gameManager.getEquipmentInfoAsString(-2));
         assertEquals("E:-2", gameManager.getSquareInfo(2,0));
     }
 
@@ -104,10 +104,11 @@ public class TestGameManager {
         result = new String[7];
         result[0] = "4";
         result[1] = "Vampiro";
-        result[2] = "Crawler";
-        result[3] = "0";
-        result[4] = "1";
-        result[5] = null;
+        result[2] = "Zombie";
+        result[3] = "Crawler";
+        result[4] = "0";
+        result[5] = "1";
+        result[6] = null;
         assertEquals("Z:4", gameManager.getSquareInfo(0,1));
         assertEquals(Arrays.toString(result), Arrays.toString(gameManager.getCreatureInfo(4)));
         result = new String[7];
@@ -272,7 +273,7 @@ public class TestGameManager {
         List<Integer> ids = new ArrayList<>();
         ids.add(9);
         assertEquals(ids, gameManager.getIdsInSafeHaven());
-        assertEquals("9 | Adulto | Humano | John Wayne | +1 @ (6, 1) | -1 | Escudo de madeira @ (6,1)", gameManager.getCreatureInfoAsString(9));
+        assertEquals("9 | Adulto | Humano | John Wayne | +1 @ (6, 1) | -1 | Escudo de madeira @ (6, 1)", gameManager.getCreatureInfoAsString(9));
     }
 
     @Test  public void testNullString() throws InvalidFileException, FileNotFoundException {

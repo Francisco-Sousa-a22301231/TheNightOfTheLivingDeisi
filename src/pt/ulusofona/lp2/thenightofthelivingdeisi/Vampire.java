@@ -11,10 +11,11 @@ public class Vampire extends Character{
         String[] info = new String[7];
         info[0] = Integer.toString(this.getId());
         info[1] = "Vampiro";
-        info[2] = getName();
-        info[3] = Integer.toString(getColumn());
-        info[4] = Integer.toString(getLine());
-        info[5] = null;
+        info[2] = "Zombie";
+        info[3] = getName();
+        info[4] = Integer.toString(getColumn());
+        info[5] = Integer.toString(getLine());
+        info[6] = null;
         return info;
     }
 

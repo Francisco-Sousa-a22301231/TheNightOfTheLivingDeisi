@@ -31,9 +31,9 @@ public class Equipment {
 
     public String getEquipmentInfoAsString() {
         if (type == 0) {
-            return id + " | Escudo de madeira @ (" + column + "," + line + ')';
+            return id + " | Escudo de madeira @ (" + column + ", " + line + ')';
         } else if (type == 1) {
-            return id + " | Espada samurai @ (" + column + "," + line + ')';
+            return id + " | Espada samurai @ (" + column + ", " + line + ')';
         }
         return "Wrong type";
     }
@@ -90,9 +90,9 @@ public class Equipment {
             return null;
         }
         if (type == 0) {
-            return id + " | Escudo de madeira @ (" + column + "," + line + ')';
+            return id + " | Escudo de madeira @ (" + column + ", " + line + ')';
         } else if (type == 1) {
-            return id + " | Espada samurai @ (" + column + "," + line + ')';
+            return id + " | Espada samurai @ (" + column + ", " + line + ')';
         }
         return "Wrong type";
     }
