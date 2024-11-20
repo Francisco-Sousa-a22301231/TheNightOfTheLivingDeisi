@@ -190,14 +190,7 @@ public class TestGameManager {
         assertTrue(gameManager.move(4,3,6,1)); // alive moves | 9
         assertTrue(gameManager.isDay());
         assertTrue(gameManager.move(2,5,1,5)); // dead moves | 12
-        assertTrue(gameManager.move(5,4,6,3)); // alive moves | 13
-        assertTrue(gameManager.move(1,5,2,5)); // dead moves | 12
-        assertTrue(gameManager.move(2,2,2,3)); // dead moves | 12
-        assertTrue(gameManager.move(2,5,1,5)); // dead moves | 12
-        assertTrue(gameManager.isDay());
-        assertEquals("H:8", gameManager.getSquareInfo(6,3));
-        assertTrue(gameManager.move(6,3,5,2)); // alive moves | 16
-        assertEquals("E:-1", gameManager.getSquareInfo(6,3));
+        assertFalse(gameManager.move(5,4,6,3)); // alive moves | 13
     }
 
     @Test public void testSaveAndLoad() throws IOException, InvalidFileException {
@@ -226,16 +219,16 @@ public class TestGameManager {
         assertTrue(gameManager.move(3,4,2,4)); // alive moves | 2
         assertFalse(gameManager.move(1,2,2,2)); // dead tries move to dog
         assertTrue(gameManager.move(3,3,2,3)); // dead moves | 3
-        assertTrue(gameManager.move(2,2,2,1)); // alive moves | 4
+        assertFalse(gameManager.move(2,2,2,1)); // alive moves | 4
+        assertTrue(gameManager.move(2,2,3,2));
         assertTrue(gameManager.move(1,2,1,1)); // dead moves | 5
         assertTrue(gameManager.move(4,3,4,2)); // alive moves | 6
-        assertFalse(gameManager.move(1,1,2,1)); // dead tries move
         assertTrue(gameManager.move(2,3,1,3)); // dead moves | 7
         assertFalse(gameManager.gameIsOver());
-        assertTrue(gameManager.move(2,1,3,1)); // alive moves | 8
+        assertTrue(gameManager.move(3,2,2,2)); // alive moves | 8
         assertTrue(gameManager.gameIsOver());
         assertEquals("E:-3", gameManager.getSquareInfo(2,1));
-        assertEquals("H:10", gameManager.getSquareInfo(3,1));
+        assertEquals("H:10", gameManager.getSquareInfo(2,2));
     }
 
     @Test public void testGameIsOver2SH() throws InvalidFileException, FileNotFoundException {

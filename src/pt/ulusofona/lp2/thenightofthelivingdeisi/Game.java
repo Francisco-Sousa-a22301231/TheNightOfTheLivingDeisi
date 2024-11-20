@@ -181,9 +181,11 @@ public class Game {
         }
 
         if (c1 == null && sh == null) {
-            handleEmptyDestination(c0, id0, id1, column0, line0, column1, line1);
+            if (!handleEmptyDestination(c0, id0, id1, column0, line0, column1, line1)) {
+                return false;
+            }
         } else if (c1 == null) {
-            if (handleHeavenEntry(sh, c0, column0, line0) == false) {
+            if (!handleHeavenEntry(sh, c0, column0, line0)) {
                 return false;
             }
         } else {
@@ -191,8 +193,6 @@ public class Game {
                 return false;
             }
         }
-
-        handleLostEquipment(c0, column0, line0);
         moveEquipment(c0);
         addNewPlay("(" + column0 + "," + line0 + "):(" + column1 + "," + line1 + ")");
         return true;
@@ -208,20 +208,24 @@ public class Game {
                 c0.verifyMove(column0, line0, column1, line1);
     }
 
-    private void handleEmptyDestination(Character c0, int id0, int id1, int column0, int line0, int column1, int line1) {
-        board[column1][line1] = id0;
-        c0.changeCoordinates(column1, line1);
-        removeFromCoordinates(column0, line0);
-
+    private boolean handleEmptyDestination(Character c0, int id0, int id1, int column0, int line0, int column1, int line1) {
         if (id1 < 0) {
             Equipment e = getEquipment(id1);
-            if (c0.getTeam() == aliveId && canPickUpEquipment(c0, e)) {
-                c0.pickUpEquipment(e);
+            if (c0.getTeam() == aliveId && e != null) {
+                if (canPickUpEquipment(c0, e)) {
+                    c0.pickUpEquipment(e);
+                } else {
+                    return false;
+                }
             } else if (c0.getTeam() == deadId) {
                 c0.destroyEquipment(e);
             }
         }
+        board[column1][line1] = id0;
+        c0.changeCoordinates(column1, line1);
+        removeFromCoordinates(column0, line0);
         boringMoveCount++;
+        return true;
     }
 
     private boolean handleHeavenEntry(SafeHaven sh, Character c0, int column, int line) {
@@ -235,7 +239,7 @@ public class Game {
     }
 
     private boolean canPickUpEquipment(Character c0, Equipment e) {
-        return (c0.getType() != 0 && c0.getType() != 2 && c0.getType() != 3) || (c0.getType() == 0 && !e.isOffensive());
+        return e != null && ((c0.getType() != 0 && c0.getType() != 2 && c0.getType() != 3) || (c0.getType() == 0 && !e.isOffensive()));
     }
 
     private boolean handleCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
@@ -277,16 +281,6 @@ public class Game {
             boringMoveCount = 0;
         }
         return true;
-    }
-
-    private void handleLostEquipment(Character creature, int column0, int line0) {
-        if (creature.getType() == 0 || creature.getType() == 2 || creature.getType() == 3) {
-            for (Equipment e : equipments.values()) {
-                if (board[e.getColumn()][e.getLine()] != e.getId() && e.getColumn() == column0 && e.getLine() == line0) {
-                    board[e.getColumn()][e.getLine()] = e.getId();
-                }
-            }
-        }
     }
 
     private void moveEquipment(Character c) {
