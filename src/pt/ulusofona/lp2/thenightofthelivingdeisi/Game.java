@@ -183,14 +183,16 @@ public class Game {
         if (c1 == null && sh == null) {
             handleEmptyDestination(c0, id0, id1, column0, line0, column1, line1);
         } else if (c1 == null) {
-            handleHeavenEntry(sh, c0, column0, line0);
+            if (handleHeavenEntry(sh, c0, column0, line0) == false) {
+                return false;
+            }
         } else {
             if (!handleCombat(c0, c1, id0, column0, line0, column1, line1)) {
                 return false;
             }
         }
 
-        handleLostEquipment(column0, line0);
+        handleLostEquipment(c0, column0, line0);
         moveEquipment(c0);
         addNewPlay("(" + column0 + "," + line0 + "):(" + column1 + "," + line1 + ")");
         return true;
@@ -222,14 +224,18 @@ public class Game {
         boringMoveCount++;
     }
 
-    private void handleHeavenEntry(SafeHaven sh, Character c0, int column, int line) {
+    private boolean handleHeavenEntry(SafeHaven sh, Character c0, int column, int line) {
+        if (c0.getTeam() == deadId) {
+            return false;
+        }
         sh.addEntry(c0);
         removeFromCoordinates(column, line);
         boringMoveCount++;
+        return true;
     }
 
     private boolean canPickUpEquipment(Character c0, Equipment e) {
-        return c0.getType() != 0 && c0.getType() != 2 && c0.getType() != 3;
+        return (c0.getType() != 0 && c0.getType() != 2 && c0.getType() != 3) || (c0.getType() == 0 && !e.isOffensive());
     }
 
     private boolean handleCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
@@ -273,10 +279,12 @@ public class Game {
         return true;
     }
 
-    private void handleLostEquipment(int column0, int line0) {
-        for (Equipment e : equipments.values()) {
-            if (board[e.getColumn()][e.getLine()] != e.getId() && e.getColumn() == column0 && e.getLine() == line0) {
-                board[e.getColumn()][e.getLine()] = e.getId();
+    private void handleLostEquipment(Character creature, int column0, int line0) {
+        if (creature.getType() == 0 || creature.getType() == 2 || creature.getType() == 3) {
+            for (Equipment e : equipments.values()) {
+                if (board[e.getColumn()][e.getLine()] != e.getId() && e.getColumn() == column0 && e.getLine() == line0) {
+                    board[e.getColumn()][e.getLine()] = e.getId();
+                }
             }
         }
     }
