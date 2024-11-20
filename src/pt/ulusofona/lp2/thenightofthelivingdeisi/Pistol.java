@@ -19,7 +19,7 @@ public class Pistol extends Equipment{
 
     @Override
     public String getEquipmentInfoAsString() {
-        return id + " | Pistola Walter PPK @ (" + column + ", " + line + ") | " + bullets + " balas";
+        return id + " | Pistola Walther PPK @ (" + column + ", " + line + ") | " + bullets + " balas";
     }
 
 
@@ -28,6 +28,6 @@ public class Pistol extends Equipment{
         if (!inPlay || beingUsed) {
             return null;
         }
-        return id + " | Pistola Walter PPK @ (" + column + ", " + line + ") | " + bullets + " balas";
+        return id + " | Pistola Walther PPK @ (" + column + ", " + line + ") | " + bullets + " balas";
     }
 }

@@ -190,7 +190,7 @@ public class Game {
             }
         }
 
-        handleElderAndDogEquipment(c0);
+        handleLostEquipment(column0, line0);
         moveEquipment(c0);
         addNewPlay("(" + column0 + "," + line0 + "):(" + column1 + "," + line1 + ")");
         return true;
@@ -229,7 +229,7 @@ public class Game {
     }
 
     private boolean canPickUpEquipment(Character c0, Equipment e) {
-        return c0.getType() != 0 || c0.getType() != 2 || c0.getType() != 3|| !e.isOffensive();
+        return c0.getType() != 0 && c0.getType() != 2 && c0.getType() != 3;
     }
 
     private boolean handleCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
@@ -273,12 +273,10 @@ public class Game {
         return true;
     }
 
-    private void handleElderAndDogEquipment(Character c0) {
-        if (c0.getTeam() == aliveId && (c0.getType() == 2 || c0.getType() == 3) && c0.getEquipment() != null) {
-            Equipment e = c0.getEquipment();
-            if (c0.getColumn() != e.getColumn() || c0.getLine() != e.getLine()) {
+    private void handleLostEquipment(int column0, int line0) {
+        for (Equipment e : equipments.values()) {
+            if (board[e.getColumn()][e.getLine()] != e.getId() && e.getColumn() == column0 && e.getLine() == line0) {
                 board[e.getColumn()][e.getLine()] = e.getId();
-                c0.removeEquipment();
             }
         }
     }
