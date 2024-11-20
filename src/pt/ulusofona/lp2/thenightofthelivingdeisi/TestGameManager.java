@@ -280,7 +280,7 @@ public class TestGameManager {
         try {
             gameManager.loadGame(new File("test-files/nullString.txt"));
         } catch (InvalidFileException e) {
-            assertEquals(4, e.getLineWithError());
+            assertEquals(1, e.getLineWithError());
         }
     }
 

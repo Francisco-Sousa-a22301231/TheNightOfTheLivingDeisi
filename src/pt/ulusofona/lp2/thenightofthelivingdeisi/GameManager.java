@@ -44,10 +44,9 @@ public class GameManager {
                 }
                 if (lineNumber == 1) {
                     parts = line.split(" ");
-                    for (String part : parts) {
-                        if (part == null || parts.length != 2) {
-                            throw new InvalidFileException(lineNumber);
-                        }
+
+                    if (parts[0] == null || parts[1] == null || parts.length != 2) {
+                        throw new InvalidFileException(lineNumber);
                     }
                     lines = Integer.parseInt(parts[0]);
                     columns = Integer.parseInt(parts[1]);
@@ -90,6 +89,9 @@ public class GameManager {
                                         Integer.parseInt(parts[3])));
                         lineNumber++;
                         line = br.readLine();
+                    }
+                    if (line == null) {
+                        throw new InvalidFileException(lineNumber);
                     }
                     numberOfSafeHeavens = Integer.parseInt(line);
                     lineNumber++;
