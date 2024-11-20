@@ -90,13 +90,12 @@ public class GameManager {
                         lineNumber++;
                         line = br.readLine();
                     }
-                    if (line == null) {
-                        throw new InvalidFileException(lineNumber);
+                    if (line != null) {
+                        numberOfSafeHeavens = Integer.parseInt(line);
+                        lineNumber++;
+                        line = br.readLine();
                     }
-                    numberOfSafeHeavens = Integer.parseInt(line);
-                    lineNumber++;
-                    line = br.readLine();
-                    while (lineNumber < (6 + numberOfCharacters + numberOfEquipments + numberOfSafeHeavens)) {
+                    while (line != null && (lineNumber < (6 + numberOfCharacters + numberOfEquipments + numberOfSafeHeavens))) {
                         parts = line.split(" : ");
                         for (String part : parts) {
                             if (part.isEmpty() || Objects.equals(part, "") || parts.length != 2) {

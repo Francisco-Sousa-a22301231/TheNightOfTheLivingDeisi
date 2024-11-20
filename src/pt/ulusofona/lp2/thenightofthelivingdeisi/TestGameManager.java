@@ -299,6 +299,11 @@ public class TestGameManager {
             gameManager.loadGame(new File("test-files/naoExiste.txt"));
         } catch (FileNotFoundException e) {
         }
+    }
 
+    @Test public void testNoSH() throws InvalidFileException, FileNotFoundException {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/noSH.txt"));
+        assertEquals("" , gameManager.getSquareInfo(0,6));
     }
 }
