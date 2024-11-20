@@ -16,6 +16,7 @@ public class Character {
     protected int diagonalMove;
     private int aliveId;
     private int deadId;
+    private boolean inSafeHaven = false;
 
     public Character(int id, int team, int type, String name, int column, int line, int verticalMove, int horizontalMove, int diagonalMove, int aliveId, int deadId) {
         this.id = id;
@@ -39,6 +40,10 @@ public class Character {
             this.horizontalMove = horizontalMove;
             this.diagonalMove = diagonalMove;
         }
+    }
+
+    public void enteredSafeHaven() {
+        inSafeHaven = true;
     }
 
     public String[] getCreatureInfo() {
@@ -68,8 +73,13 @@ public class Character {
             }
         }
         info[3] = name;
-        info[4] = Integer.toString(column);
-        info[5] = Integer.toString(line);
+        if (inSafeHaven) {
+            info[4] = null;
+            info[5] = null;
+        } else {
+            info[4] = Integer.toString(column);
+            info[5] = Integer.toString(line);
+        }
         info[6] = null;
         return info;
     }

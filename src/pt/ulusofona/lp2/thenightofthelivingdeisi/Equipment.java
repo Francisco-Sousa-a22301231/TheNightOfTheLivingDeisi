@@ -20,13 +20,16 @@ public class Equipment {
     }
 
     public String[] getEquipmentInfo() {
-        String[] info = new String[5];
-        info[0] = Integer.toString(id);
-        info[1] = Integer.toString(type);
-        info[2] = Integer.toString(column);
-        info[3] = Integer.toString(line);
-        info[4] = null;
-        return info;
+        if (inPlay && !beingUsed) {
+            String[] info = new String[5];
+            info[0] = Integer.toString(id);
+            info[1] = Integer.toString(type);
+            info[2] = Integer.toString(column);
+            info[3] = Integer.toString(line);
+            info[4] = null;
+            return info;
+        }
+        return null;
     }
 
     public String getEquipmentInfoAsString() {

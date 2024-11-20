@@ -172,18 +172,18 @@ public class GameManager {
 
     public String[] getCreatureInfo(int id) {
         Character character = game.getCharacter(id);
-        if (character!= null) {
+        if (character != null) {
             return character.getCreatureInfo();
         }
-       return new String[0];
+        return null;
     }
 
     public String[] getEquipmentInfo(int id) {
         Equipment equipment = game.getEquipment(id);
-        if (equipment!= null) {
+        if (equipment != null) {
             return equipment.getEquipmentInfo();
         }
-        return new String[0];
+        return null;
     }
 
     public String getCreatureInfoAsString(int id) {
@@ -191,7 +191,7 @@ public class GameManager {
         if (character != null) {
             return character.toString();
         }
-        return "";
+        return null;
     }
 
     public String getEquipmentInfoAsString(int id) {
@@ -199,7 +199,7 @@ public class GameManager {
         if (equipment!= null) {
             return equipment.toString();
         }
-        return "";
+        return null;
     }
 
     public boolean hasEquipment(int creatureId, int equipmentTypeId) {
