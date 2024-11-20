@@ -8,6 +8,9 @@ public class Adult extends Character{
 
     @Override
     public String toString() {
+        if (getTeam() != getOriginalTeam()) {
+            return getId() + " | Adulto | Zombie (Transformado) | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
+        }
         if (getTeam() == getAliveId()) {
             if (getEquipment() != null) {
                 return getId() + " | Adulto | Humano | " + getName() + " | +" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ") | "  + getEquipment().getEquipmentInfoAsString();

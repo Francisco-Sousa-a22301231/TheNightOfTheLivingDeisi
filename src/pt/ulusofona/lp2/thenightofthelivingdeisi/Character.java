@@ -74,6 +74,10 @@ public class Character {
         return info;
     }
 
+    public int getOriginalTeam() {
+        return originalTeam;
+    }
+
     public boolean hasEquipment(int equipmentTypeId) {
         return equipment != null && equipment.getTipo() == equipmentTypeId;
     }

@@ -8,6 +8,9 @@ public class Child extends Character{
 
     @Override
     public String toString() {
+        if (getTeam() != getOriginalTeam()) {
+            return getId() + " | Criança | Zombie (Transformado) | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
+        }
         if (getTeam() == getAliveId()) {
             if (getEquipment() != null) {
                 return getId() + " | Criança | Humano | " + getName() + " | +" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ") | "  + getEquipment().getEquipmentInfoAsString();

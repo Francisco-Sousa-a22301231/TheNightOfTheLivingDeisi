@@ -8,6 +8,9 @@ public class Elder extends Character{
 
     @Override
     public String toString() {
+        if (getTeam() != getOriginalTeam()) {
+            return getId() + " | Idoso | Zombie (Transformado) | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
+        }
         if (getTeam() == getAliveId()) {
             return getId() + " | Idoso | Humano | " + getName() + " | +" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
         } else if (getTeam() == getDeadId()) {
