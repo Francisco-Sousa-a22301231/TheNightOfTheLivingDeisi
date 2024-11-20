@@ -239,7 +239,7 @@ public class Game {
     }
 
     private boolean canPickUpEquipment(Character c0, Equipment e) {
-        return e != null && ((c0.getType() != 0 && c0.getType() != 2 && c0.getType() != 3) || (c0.getType() == 0 && !e.isOffensive()));
+        return e != null && ((c0.getType() != 0 && c0.getType() != 3) || (c0.getType() == 0 && !e.isOffensive()));
     }
 
     private boolean handleCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
@@ -284,8 +284,14 @@ public class Game {
     }
 
     private void moveEquipment(Character c) {
-        if (c.getEquipment()!= null) {
-            c.getEquipment().moveEquipment(c.getColumn(), c.getLine());
+        Equipment e = c.getEquipment();
+        if (e != null) {
+            if (c.getType() == 2 && (c.getColumn() != e.getColumn() || c.getLine() != e.getLine())) {
+                c.removeEquipment();
+                board[e.getColumn()][e.getLine()] = e.getId();
+            } else {
+                e.moveEquipment(c.getColumn(), c.getLine());
+            }
         }
     }
 

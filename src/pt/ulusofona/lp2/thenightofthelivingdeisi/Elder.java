@@ -12,6 +12,9 @@ public class Elder extends Character{
             return getId() + " | Idoso | Zombie (Transformado) | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
         }
         if (getTeam() == getAliveId()) {
+            if (getEquipment() != null) {
+                return getId() + " | Idoso | Humano | " + getName() + " | +" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ") | "  + getEquipment().getEquipmentInfoAsString();
+            }
             return getId() + " | Idoso | Humano | " + getName() + " | +" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
         } else if (getTeam() == getDeadId()) {
             return getId() + " | Idoso | Zombie | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";

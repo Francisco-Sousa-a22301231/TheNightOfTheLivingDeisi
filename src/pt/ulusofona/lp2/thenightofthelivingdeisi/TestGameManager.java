@@ -132,7 +132,7 @@ public class TestGameManager {
         assertEquals("9 | Adulto | Humano | John Wayne | +0 @ (6, 5)", gameManager.getCreatureInfoAsString(9));
         assertEquals("10 | Cão | Max @ (2, 2)", gameManager.getCreatureInfoAsString(10));
         assertEquals("", gameManager.getSquareInfo(0,5));
-        assertEquals("", gameManager.getSquareInfo(7,8));
+        assertEquals(null, gameManager.getSquareInfo(7,8));
         assertFalse( gameManager.hasEquipment(3,3));
         assertFalse( gameManager.hasEquipment(4,3));
         assertFalse( gameManager.gameIsOver());
@@ -191,7 +191,7 @@ public class TestGameManager {
         assertTrue(gameManager.move(4,3,6,1)); // alive moves | 9
         assertTrue(gameManager.isDay());
         assertTrue(gameManager.move(2,5,1,5)); // dead moves | 12
-        assertFalse(gameManager.move(5,4,6,3)); // alive moves | 13
+        assertTrue(gameManager.move(5,4,6,3)); // alive moves | 13
     }
 
     @Test public void testSaveAndLoad() throws IOException, InvalidFileException {
@@ -300,5 +300,13 @@ public class TestGameManager {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/noSH.txt"));
         assertEquals("" , gameManager.getSquareInfo(0,6));
+    }
+
+    @Test public void testElderPicksAndsDropsShield() throws InvalidFileException, FileNotFoundException {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/elderPicksUpShield.txt"));
+        assertEquals("H:8" , gameManager.getSquareInfo(6,3));
+        assertTrue(gameManager.move(6,3,5,2));
+        assertEquals("E:-1" , gameManager.getSquareInfo(6,3));
     }
 }

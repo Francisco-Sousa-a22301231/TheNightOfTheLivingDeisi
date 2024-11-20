@@ -165,7 +165,7 @@ public class GameManager {
 
     public String getSquareInfo(int column, int line) {
         if (column >= game.getColumns() || line >= game.getLines()) {
-            return "";
+            return null;
         }
         return game.getSquareInfo(column, line);
     }
