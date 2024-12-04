@@ -123,7 +123,7 @@ public class Game {
 
     public String getSquareInfo(int column, int line) {
         if (column > getColumns() || line > getLines() || column < 0 || line < 0) {
-            return "";
+            return "null";
         }
         int id = searchCoordinates(column, line);
         if (id == 0) {

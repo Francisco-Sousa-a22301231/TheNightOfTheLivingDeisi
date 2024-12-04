@@ -13,8 +13,13 @@ public class Dog extends Character{
         info[1] = "Cão";
         info[2] = "Humano";
         info[3] = getName();
-        info[4] = Integer.toString(getColumn());
-        info[5] = Integer.toString(getLine());
+        if (isInSafeHaven()) {
+            info[4] = Integer.toString(getColumn());
+            info[5] = null;
+        } else {
+            info[4] = Integer.toString(getColumn());
+            info[5] = Integer.toString(getLine());
+        }
         info[6] = null;
         return info;
     }

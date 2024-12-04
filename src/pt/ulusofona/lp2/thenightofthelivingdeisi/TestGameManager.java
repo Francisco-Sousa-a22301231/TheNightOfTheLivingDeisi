@@ -309,4 +309,10 @@ public class TestGameManager {
         assertTrue(gameManager.move(6,3,5,2));
         assertEquals("E:-1" , gameManager.getSquareInfo(6,3));
     }
+
+    @Test public void testOutsideSquareInfo() throws InvalidFileException, FileNotFoundException {
+        GameManager gameManager = new GameManager();
+        gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
+        assertEquals(null , gameManager.getSquareInfo(8,3));
+    }
 }

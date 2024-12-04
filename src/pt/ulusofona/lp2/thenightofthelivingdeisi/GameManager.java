@@ -115,10 +115,8 @@ public class GameManager {
                 }
                 lineNumber++;
             }
-
             game = new Game(columns, lines, startingTeamId, aliveId, deadId, characters, equipments, safeHavens, moves);
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
