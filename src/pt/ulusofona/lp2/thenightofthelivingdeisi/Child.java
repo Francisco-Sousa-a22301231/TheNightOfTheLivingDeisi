@@ -8,6 +8,9 @@ public class Child extends Character{
 
     @Override
     public String toString() {
+        if (isInSafeHaven()) {
+            return getId() + " | Criança | Humano | " + getName() + " | +" + equipmentCount + " @ Safe Haven";
+        }
         if (getTeam() != getOriginalTeam()) {
             return getId() + " | Criança | Zombie (Transformado) | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
         }

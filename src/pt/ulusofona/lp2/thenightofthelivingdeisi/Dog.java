@@ -21,6 +21,9 @@ public class Dog extends Character{
 
     @Override
     public String toString() {
+        if (isInSafeHaven()) {
+            return getId() + " | Cão | " + getName() + " @ Safe Haven";
+        }
         return getId() + " | Cão | " + getName() + " @ (" + getColumn() + ", " + getLine() + ")";
     }
 }

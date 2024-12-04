@@ -8,6 +8,9 @@ public class Elder extends Character{
 
     @Override
     public String toString() {
+        if (isInSafeHaven()) {
+            return getId() + " | Idoso | Humano | " + getName() + " | +" + equipmentCount + " @ Safe Haven";
+        }
         if (getTeam() != getOriginalTeam()) {
             return getId() + " | Idoso | Zombie (Transformado) | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
         }

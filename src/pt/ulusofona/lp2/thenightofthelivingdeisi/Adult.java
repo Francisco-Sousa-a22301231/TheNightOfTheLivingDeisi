@@ -8,6 +8,9 @@ public class Adult extends Character{
 
     @Override
     public String toString() {
+        if (isInSafeHaven()) {
+            return getId() + " | Adulto | Humano | " + getName() + " | +" + equipmentCount + " @ Safe Haven";
+        }
         if (getTeam() != getOriginalTeam()) {
             return getId() + " | Adulto | Zombie (Transformado) | " + getName() + " | -" + equipmentCount + " @ (" + getColumn() + ", " + getLine() + ")";
         }

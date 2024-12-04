@@ -172,6 +172,10 @@ public class Character {
         this.diagonalMove = 0;
     }
 
+    public boolean isInSafeHaven() {
+        return isInSafeHaven();
+    }
+
     @Override
     public String toString() {
         if (getTeam() == aliveId) {
