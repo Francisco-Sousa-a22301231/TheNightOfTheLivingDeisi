@@ -74,8 +74,8 @@ public class Character {
         }
         info[3] = name;
         if (inSafeHaven) {
-            info[4] = null;
-            info[5] = null;
+            info[4] = "null";
+            info[5] = "null";
         } else {
             info[4] = Integer.toString(column);
             info[5] = Integer.toString(line);

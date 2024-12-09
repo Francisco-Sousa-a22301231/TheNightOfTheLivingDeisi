@@ -21,103 +21,101 @@ public class GameManager {
         return game;
     }
 
-    public void loadGame(File file) throws InvalidFileException, FileNotFoundException {
+    public void loadGame(File file) throws InvalidFileException, IOException {
         this.file = file;
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line = "";
-            String[] parts;
-            int lineNumber = 1;
-            int columns = 0;
-            int lines = 0;
-            int startingTeamId = 0;
-            int numberOfCharacters = 0;
-            int numberOfEquipments = 0;
-            int numberOfSafeHeavens = 0;
-            HashMap<Integer, Character> characters = new HashMap<>();
-            HashMap<Integer, Equipment> equipments = new HashMap<>();
-            ArrayList<SafeHaven> safeHavens = new ArrayList<>();
-            ArrayList<String> moves = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line = "";
+        String[] parts;
+        int lineNumber = 1;
+        int columns = 0;
+        int lines = 0;
+        int startingTeamId = 0;
+        int numberOfCharacters = 0;
+        int numberOfEquipments = 0;
+        int numberOfSafeHeavens = 0;
+        HashMap<Integer, Character> characters = new HashMap<>();
+        HashMap<Integer, Equipment> equipments = new HashMap<>();
+        ArrayList<SafeHaven> safeHavens = new ArrayList<>();
+        ArrayList<String> moves = new ArrayList<>();
 
-            while ((line = br.readLine()) != null) {
-                if (line.isEmpty()) {
+        while ((line = br.readLine()) != null) {
+            if (line.isEmpty()) {
+                throw new InvalidFileException(lineNumber);
+            }
+            if (lineNumber == 1) {
+                parts = line.split(" ");
+
+                if (parts[0] == null || parts[1] == null || parts.length != 2) {
                     throw new InvalidFileException(lineNumber);
                 }
-                if (lineNumber == 1) {
-                    parts = line.split(" ");
-
-                    if (parts[0] == null || parts[1] == null || parts.length != 2) {
-                        throw new InvalidFileException(lineNumber);
-                    }
-                    lines = Integer.parseInt(parts[0]);
-                    columns = Integer.parseInt(parts[1]);
-                } else if (lineNumber == 2) {
-                    startingTeamId = Integer.parseInt(line);
-                    if (startingTeamId != aliveId && startingTeamId != deadId ) {
-                        throw new InvalidFileException(lineNumber);
-                    }
-                } else if (lineNumber == 3) {
-                    numberOfCharacters = Integer.parseInt(line);
-                    if (numberOfCharacters > columns * lines) {
-                        throw new InvalidFileException(lineNumber);
-                    }
-                } else if (lineNumber == 4) {
-                    while (lineNumber < (4 + numberOfCharacters)) {
-                        parts = line.split(" : ");
-                        for (String part : parts) {
-                            if (part.isEmpty() || Objects.equals(part, "") || parts.length != 6) {
-                                throw new InvalidFileException(lineNumber);
-                            }
+                lines = Integer.parseInt(parts[0]);
+                columns = Integer.parseInt(parts[1]);
+            } else if (lineNumber == 2) {
+                startingTeamId = Integer.parseInt(line);
+                if (startingTeamId != aliveId && startingTeamId != deadId ) {
+                    throw new InvalidFileException(lineNumber);
+                }
+            } else if (lineNumber == 3) {
+                numberOfCharacters = Integer.parseInt(line);
+                if (numberOfCharacters > columns * lines) {
+                    throw new InvalidFileException(lineNumber);
+                }
+            } else if (lineNumber == 4) {
+                while (lineNumber < (4 + numberOfCharacters)) {
+                    parts = line.split(" : ");
+                    for (String part : parts) {
+                        if (part.isEmpty() || Objects.equals(part, "") || parts.length != 6) {
+                            throw new InvalidFileException(lineNumber);
                         }
-                        characters.put(Integer.parseInt(parts[0]),
-                                newCharacter(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
-                                        parts[3], Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
-                        lineNumber++;
-                        line = br.readLine();
                     }
-                    numberOfEquipments = Integer.parseInt(line);
+                    characters.put(Integer.parseInt(parts[0]),
+                            newCharacter(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
+                                    parts[3], Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
                     lineNumber++;
                     line = br.readLine();
-                    while (lineNumber < (5 + numberOfCharacters + numberOfEquipments)) {
-                        parts = line.split(" : ");
-                        for (String part : parts) {
-                            if (part.isEmpty() || Objects.equals(part, "") || parts.length != 4) {
-                                throw new InvalidFileException(lineNumber);
-                            }
+                }
+                numberOfEquipments = Integer.parseInt(line);
+                lineNumber++;
+                line = br.readLine();
+                while (lineNumber < (5 + numberOfCharacters + numberOfEquipments)) {
+                    parts = line.split(" : ");
+                    for (String part : parts) {
+                        if (part.isEmpty() || Objects.equals(part, "") || parts.length != 4) {
+                            throw new InvalidFileException(lineNumber);
                         }
-                        equipments.put(Integer.parseInt(parts[0]),
-                                newEquipment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
-                                        Integer.parseInt(parts[3])));
-                        lineNumber++;
-                        line = br.readLine();
                     }
-                    if (line != null) {
-                        numberOfSafeHeavens = Integer.parseInt(line);
-                        lineNumber++;
-                        line = br.readLine();
-                    }
-                    while (line != null && (lineNumber < (6 + numberOfCharacters + numberOfEquipments + numberOfSafeHeavens))) {
-                        parts = line.split(" : ");
-                        for (String part : parts) {
-                            if (part.isEmpty() || Objects.equals(part, "") || parts.length != 2) {
-                                throw new InvalidFileException(lineNumber);
-                            }
+                    equipments.put(Integer.parseInt(parts[0]),
+                            newEquipment(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
+                                    Integer.parseInt(parts[3])));
+                    lineNumber++;
+                    line = br.readLine();
+                }
+                if (line != null) {
+                    numberOfSafeHeavens = Integer.parseInt(line);
+                    lineNumber++;
+                    line = br.readLine();
+                }
+                while (line != null && (lineNumber < (6 + numberOfCharacters + numberOfEquipments + numberOfSafeHeavens))) {
+                    parts = line.split(" : ");
+                    for (String part : parts) {
+                        if (part.isEmpty() || Objects.equals(part, "") || parts.length != 2) {
+                            throw new InvalidFileException(lineNumber);
                         }
-                        safeHavens.add(new SafeHaven(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
-                        lineNumber++;
-                        line = br.readLine();
                     }
-                    if (line != null && !line.trim().isEmpty()) {
+                    safeHavens.add(new SafeHaven(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+                    lineNumber++;
+                    line = br.readLine();
+                }
+                if (line != null && !line.trim().isEmpty()) {
+                    moves.add(line);
+                    while ((line = br.readLine()) != null) {
                         moves.add(line);
-                        while ((line = br.readLine()) != null) {
-                            moves.add(line);
-                        }
                     }
                 }
-                lineNumber++;
             }
-            game = new Game(columns, lines, startingTeamId, aliveId, deadId, characters, equipments, safeHavens, moves);
-        } catch (IOException e) {
+            lineNumber++;
         }
+        game = new Game(columns, lines, startingTeamId, aliveId, deadId, characters, equipments, safeHavens, moves);
     }
 
 

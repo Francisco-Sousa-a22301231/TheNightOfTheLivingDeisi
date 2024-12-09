@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGameManager {
 
-    @Test public void testGame_7x7_5H_5Z_4E_2SH() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGame_7x7_5H_5Z_4E_2SH() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         Game game = gameManager.getGame();
@@ -52,7 +52,7 @@ public class TestGameManager {
         assertEquals("E:-2", gameManager.getSquareInfo(2,0));
     }
 
-    @Test public void testGameCreatureInfo() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGameCreatureInfo() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         Game game = gameManager.getGame();
@@ -138,7 +138,7 @@ public class TestGameManager {
         assertFalse( gameManager.gameIsOver());
     }
 
-    @Test public void testGetWorldSize() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGetWorldSize() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         int[] worldSize = gameManager.getWorldSize();
@@ -146,7 +146,7 @@ public class TestGameManager {
         assertEquals(7, worldSize[1]);
     }
 
-    @Test public void testGetCurrentTeam() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGetCurrentTeam() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         int team = gameManager.getCurrentTeamId();
@@ -155,7 +155,7 @@ public class TestGameManager {
 
 
 
-    @Test public void testMove() throws InvalidFileException, FileNotFoundException {
+    @Test public void testMove() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         assertEquals(1, gameManager.getGame().searchCoordinates(3,3));
@@ -212,7 +212,7 @@ public class TestGameManager {
         assertEquals("", gameManager.getSquareInfo(3,3));
     }
 
-    @Test public void testGameIsOver() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGameIsOver() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         assertFalse(gameManager.gameIsOver());
@@ -232,7 +232,7 @@ public class TestGameManager {
         assertEquals("H:10", gameManager.getSquareInfo(2,2));
     }
 
-    @Test public void testGameIsOver2SH() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGameIsOver2SH() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         assertTrue(gameManager.move(1, 1, 2, 1));
@@ -255,7 +255,7 @@ public class TestGameManager {
         assertEquals(ids, gameManager.getIdsInSafeHaven());
     }
 
-    @Test public void testGameSafeHaven() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGameSafeHaven() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         assertTrue(gameManager.move(5, 3, 5, 4));
@@ -270,7 +270,7 @@ public class TestGameManager {
         assertEquals("9 | Adulto | Humano | John Wayne | +1 @ (6, 1) | -1 | Escudo de madeira @ (6, 1)", gameManager.getCreatureInfoAsString(9));
     }
 
-    @Test  public void testNullString() throws InvalidFileException, FileNotFoundException {
+    @Test  public void testNullString() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         try {
             gameManager.loadGame(new File("test-files/nullString.txt"));
@@ -279,7 +279,7 @@ public class TestGameManager {
         }
     }
 
-    @Test  public void testErrorLine4() throws FileNotFoundException {
+    @Test  public void testErrorLine4() throws FileNotFoundException, IOException {
         GameManager gameManager = new GameManager();
         try {
             gameManager.loadGame(new File("test-files/erroLine4.txt"));
@@ -288,7 +288,7 @@ public class TestGameManager {
         }
     }
 
-    @Test public void testGame_nofile() throws InvalidFileException, FileNotFoundException {
+    @Test public void testGame_nofile() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         try {
             gameManager.loadGame(new File("test-files/naoExiste.txt"));
@@ -296,13 +296,13 @@ public class TestGameManager {
         }
     }
 
-    @Test public void testNoSH() throws InvalidFileException, FileNotFoundException {
+    @Test public void testNoSH() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/noSH.txt"));
         assertEquals("" , gameManager.getSquareInfo(0,6));
     }
 
-    @Test public void testElderPicksAndsDropsShield() throws InvalidFileException, FileNotFoundException {
+    @Test public void testElderPicksAndsDropsShield() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/elderPicksUpShield.txt"));
         assertEquals("H:8" , gameManager.getSquareInfo(6,3));
@@ -310,7 +310,7 @@ public class TestGameManager {
         assertEquals("E:-1" , gameManager.getSquareInfo(6,3));
     }
 
-    @Test public void testOutsideSquareInfo() throws InvalidFileException, FileNotFoundException {
+    @Test public void testOutsideSquareInfo() throws InvalidFileException, IOException {
         GameManager gameManager = new GameManager();
         gameManager.loadGame(new File("test-files/7x7_5H_5Z_4E_2SH.txt"));
         assertEquals(null , gameManager.getSquareInfo(8,3));

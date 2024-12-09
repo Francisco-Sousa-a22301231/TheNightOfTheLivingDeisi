@@ -14,8 +14,8 @@ public class Dog extends Character{
         info[2] = "Humano";
         info[3] = getName();
         if (isInSafeHaven()) {
-            info[4] = Integer.toString(getColumn());
-            info[5] = null;
+            info[4] = "null";
+            info[5] = "null";
         } else {
             info[4] = Integer.toString(getColumn());
             info[5] = Integer.toString(getLine());
