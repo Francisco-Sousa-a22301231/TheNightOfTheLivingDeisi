@@ -253,7 +253,8 @@ public class Game {
 
     private boolean handleAliveVsDeadCombat(Character c0, Character c1, int id0, int column0, int line0, int column1, int line1) {
         if (c0.hasEquipment(0) || c0.hasEquipment(3) || c0.doesntHaveEquipment()) {
-            return false;
+            boringMoveCount = 0;
+            return true;
         }
         if ((c0.hasEquipment(2) && c0.shoots()) || c0.hasEquipment(1)) {
             board[column1][line1] = id0;
